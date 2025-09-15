@@ -33,6 +33,9 @@ def get_models():
         r = requests.get(base_url.rstrip("/") + "/models", timeout=3)
         if r.ok:
             data = r.json()
+            if isinstance(data, dict) and "data" in data:  # OpenAI format
+                for m in data["data"]:
+                    names.append(m.get("id") or m.get("name") or m.get("model"))
             if isinstance(data, dict) and "models" in data:
                 for m in data["models"]:
                     names.append(m.get("name") or m.get("model"))
